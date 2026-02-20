@@ -1,0 +1,53 @@
+# Build directories (generated .cmake files and binaries live here)
+example-beast/build-conan/
+example-beast/build-vcpkg/
+build/
+
+# vcpkg (if cloned into repo)
+vcpkg/
+# vcpkg manifest mode install output (next to vcpkg.json)
+vcpkg_installed/
+
+# Conan
+conan.lock
+
+# CMake generated (Conan/CMake create these)
+CMakeUserPresets.json
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Boost source (Step 2: full clone is large and reproducible via git clone)
+boost/
+boost_1_*/
+
+# Build caching (Step 4)
+.ccache/
+sccache/
+
+# Compiled objects / binaries (safety net outside build dirs)
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.exe
+a.out
+
+# Python (e.g. cursor-chat-browser-python, scripts)
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+*.egg-info/
+.eggs/
+
+# IDE / editor
+.idea/
+.vscode/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db

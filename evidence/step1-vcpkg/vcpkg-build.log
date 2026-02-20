@@ -1,0 +1,10 @@
+=== Step 1a: vcpkg + Boost.Beast (start: 2026-02-21T00:55:17+08:00) ===
+vcpkg not found. Clone and bootstrap:
+  git clone https://github.com/microsoft/vcpkg.git /home/brad/Desktop/Workspace/Boost-hands-on-exp/vcpkg
+  /home/brad/Desktop/Workspace/Boost-hands-on-exp/vcpkg/bootstrap-vcpkg.sh
+  export VCPKG_ROOT=/home/brad/Desktop/Workspace/Boost-hands-on-exp/vcpkg
+=== Step 1a: vcpkg + Boost.Beast (start: 2026-02-21T03:51:12+08:00) ===
+vcpkg not found. Clone and bootstrap:
+  git clone https://github.com/microsoft/vcpkg.git /home/brad/Desktop/Workspace/Boost-hands-on-exp/vcpkg
+  /home/brad/Desktop/Workspace/Boost-hands-on-exp/vcpkg/bootstrap-vcpkg.sh
+  export VCPKG_ROOT=/home/brad/Desktop/Workspace/Boost-hands-on-exp/vcpkg

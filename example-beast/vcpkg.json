@@ -1,0 +1,7 @@
+{
+  "name": "example-beast",
+  "version": "0.1.0",
+  "description": "Example project using Boost.Beast via vcpkg",
+  "dependencies": ["boost-beast"],
+  "builtin-baseline": "2024.12.12"
+}
