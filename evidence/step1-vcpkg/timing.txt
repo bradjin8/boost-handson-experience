@@ -1,0 +1,3 @@
+vcpkg_install_seconds: 877.446661074
+cmake_configure_seconds: 13.126636370
+cmake_build_seconds: 1.812809152
