@@ -30,8 +30,10 @@ Evidence: `evidence/step1-vcpkg/` and `evidence/step1-conan/` (logs + `timing.tx
 
 ## Step 2: Full build from source
 
-- Clone Boost, configure (b2), build, install.
-- Build and run Boost examples/tests.
+- From repo root: `./run-step2-source-build.sh`
+- Clone Boost (modular via boostdep), bootstrap, b2 build, install.
+- Build and run example_beast against installed Boost.
+- Requires: git, python3, g++, build-essential.
 - Logs and timings → `evidence/step2-source-build/`.
 
 ## Step 3: Incremental build

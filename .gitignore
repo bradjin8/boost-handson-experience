@@ -1,6 +1,7 @@
 # Build directories (generated .cmake files and binaries live here)
 example-beast/build-conan/
 example-beast/build-vcpkg/
+example-beast/build-step2/
 build/
 
 # vcpkg (if cloned into repo)
@@ -19,7 +20,9 @@ Makefile
 
 # Boost source (Step 2: full clone is large and reproducible via git clone)
 boost/
+boost-src/
 boost_1_*/
+install-boost/
 
 # Build caching (Step 4)
 .ccache/
