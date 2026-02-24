@@ -50,22 +50,19 @@ All five hands-on tasks were completed on Linux. The example project (`example-b
 ### Step 2 — Full build from source
 
 - **Script:** `./run-step2-source-build.sh`
-- **Process:** Clone Boost (or reuse existing), bootstrap, `b2 --with-headers install`, build example_beast against `install-boost/`.
-- **Result:** Headers installed; example_beast built and ran.
-- **Timings (from `evidence/step2-source-build/timing.txt`):**
-  - clone: 0 s (reused existing)
-  - bootstrap: 27.5 s
-  - b2 install (headers): 25.7 s
-  - example build: 2.5 s
+- **Process:** Clone Boost (or reuse), bootstrap, **full b2 build** (`b2 install` — all ~160 libraries, headers + compiled .cpp), then build example_beast against `install-boost/`. Resource allocation (CPUs, RAM, disk) → `resource.txt`, `resource-allocation.md`.
+- **Result:** Full Boost installed (libs + headers); example_beast built and ran. Cold baseline and incremental runs both documented.
+- **Timings:**
+  - **Cold build** (`timing-without-cache.txt`): clone 0 s, bootstrap 27.5 s, b2_install 240.1 s (~4 min), example 1.6 s.
+  - **With existing build** (`timing.txt`): clone 0 s, bootstrap 25.4 s, b2_install 39.5 s, example 1.7 s.
+- **Resource:** 4 CPUs, 5.9 Gi RAM, 98 G disk (see `evidence/step2-source-build/resource-allocation.md`).
 
-### Step 3 — Incremental build
+### Step 3 — Incremental build (with/without cache)
 
 - **Script:** `./run-step3-incremental.sh`
-- **Process:** One header modified in Boost.Beast (`string_param.hpp`), then `b2 headers` with GCC and Clang.
-- **Result:** Both toolset runs completed.
-- **Timings (from `evidence/step3-incremental/timing.txt`):**
-  - b2 headers (gcc): 2.3 s
-  - b2 headers (clang): 2.8 s
+- **Process:** One header modified in Beast, then `b2 headers` with GCC (and Clang). **Part A:** without cache → `timing-without-cache.txt`. **Part B:** with ccache (cold then warm) → `timing-with-cache.txt`, `cache-stats.txt`.
+- **Result:** No-cache and with-cache runs completed.
+- **Timings:** `timing-without-cache.txt` (gcc/clang no cache), `timing-with-cache.txt` (gcc with cache cold/warm); `timing.txt` = legacy no-cache values.
 
 ### Step 4 — Build caching
 
@@ -82,7 +79,7 @@ All five hands-on tasks were completed on Linux. The example project (`example-b
 ## What worked
 
 - vcpkg and Conan both provided Boost.Beast and produced a working example_beast.
-- Full source workflow: clone (or reuse), bootstrap, `b2 --with-headers install`, and example build against install.
+- Full source workflow: clone (or reuse), bootstrap, full `b2 install` (all ~160 Boost libraries), example build against install. Cold vs incremental timings in `timing-without-cache.txt` and `timing.txt`; resource allocation in `resource-allocation.md`.
 - Incremental step: single-file change in Beast and `b2 headers` with GCC and Clang.
 - Build caching: ccache integrated via `CMAKE_CXX_COMPILER_LAUNCHER`; warm build much faster than cold.
 - Scripts (`run-step1-vcpkg.sh`, `run-step1-conan.sh`, `run-step2-source-build.sh`, `run-step3-incremental.sh`, `run-step4-cache.sh`) run from repo root and write logs/timings under `evidence/`.
@@ -95,7 +92,7 @@ All five hands-on tasks were completed on Linux. The example project (`example-b
 |-------|------------|
 | vcpkg required `VCPKG_ROOT` in child processes | Export `VCPKG_ROOT` in `.bashrc` (e.g. `export VCPKG_ROOT=~/vcpkg-...`) |
 | vcpkg baseline "2024.12.12" not a valid commit SHA | Use 40-char commit SHA in `vcpkg.json` (e.g. for 2026.01.16) |
-| b2 `--with-beast` / `--with-system` invalid (Beast header-only; system not a buildable lib in this layout) | Use `b2 --with-headers install` for headers-only install |
+| b2 `--with-beast` / `--with-system` invalid (Beast header-only; system not a buildable lib in this layout) | Use `b2 install` for full build (all libraries + headers) |
 | Step 3: b2 "headers" is symlinks, not compilation | Incremental step still demonstrates toolset=gcc vs toolset=clang and change-then-rebuild |
 
 ---
@@ -106,8 +103,8 @@ All five hands-on tasks were completed on Linux. The example project (`example-b
 |------|-----------|------------|
 | 1a vcpkg | `evidence/step1-vcpkg/` | `vcpkg-build.log`, `timing.txt` |
 | 1b Conan | `evidence/step1-conan/` | `conan-build.log`, `timing.txt` |
-| 2 Source build | `evidence/step2-source-build/` | `source-build.log`, `timing.txt` |
-| 3 Incremental | `evidence/step3-incremental/` | `incremental.log`, `timing.txt` |
+| 2 Source build | `evidence/step2-source-build/` | `source-build.log`, `timing.txt`, `timing-without-cache.txt`, `resource.txt`, `resource-allocation.md` |
+| 3 Incremental | `evidence/step3-incremental/` | `incremental.log`, `timing.txt`, `timing-without-cache.txt`, `timing-with-cache.txt`, `cache-stats.txt` |
 | 4 Cache | `evidence/step4-cache/` | `cache.log`, `timing.txt`, `cache-stats.txt` |
 
 All timings and logs are under `evidence/` as specified in the project README.

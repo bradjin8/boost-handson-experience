@@ -34,3 +34,68 @@ Performing configuration checks
 [1] clang-14
 ...found 1268 targets...
 === Step 3 end: 2026-02-24T23:31:39+08:00 ===
+=== Step 3: Incremental build (start: 2026-02-25T05:26:38+08:00) ===
+--- modify one file in Boost.Beast ---
+--- b2 headers toolset=gcc (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit (cached) [1]
+    - default architecture     : x86 (cached) [1]
+    - symlinks supported       : yes (cached)
+
+[1] gcc-11
+...found 1268 targets...
+b2_headers_gcc_seconds: 2.228027995
+--- b2 headers toolset=clang (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit [1]
+    - default architecture     : x86 [1]
+    - symlinks supported       : yes (cached)
+
+[1] clang-14
+...found 1268 targets...
+=== Step 3 end: 2026-02-25T05:26:44+08:00 ===
+=== Step 3: Incremental build with/without cache (start: 2026-02-25T05:31:28+08:00) ===
+--- Part A: Incremental build WITHOUT cache ---
+--- b2 headers toolset=gcc, no cache (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit (cached) [1]
+    - default architecture     : x86 (cached) [1]
+    - symlinks supported       : yes (cached)
+
+[1] gcc-11
+...found 1268 targets...
+b2_headers_gcc_no_cache_seconds: 2.349226023
+--- b2 headers toolset=clang, no cache (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit (cached) [1]
+    - default architecture     : x86 (cached) [1]
+    - symlinks supported       : yes (cached)
+
+[1] clang-14
+...found 1268 targets...
+--- Part B: Incremental build WITH cache (ccache) ---
+--- b2 headers toolset=gcc, with ccache — cold (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit (cached) [1]
+    - default architecture     : x86 (cached) [1]
+    - symlinks supported       : yes (cached)
+
+[1] gcc-11
+...found 1268 targets...
+b2_headers_gcc_with_cache_cold_seconds: 2.316603598
+--- b2 headers toolset=gcc, with ccache — warm (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit (cached) [1]
+    - default architecture     : x86 (cached) [1]
+    - symlinks supported       : yes (cached)
+
+[1] gcc-11
+...found 1268 targets...
+--- ccache stats written to /home/brad/Desktop/Workspace/Boost-hands-on-exp/evidence/step3-incremental/cache-stats.txt ---
+=== Step 3 end: 2026-02-25T05:31:38+08:00 ===

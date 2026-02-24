@@ -36,11 +36,16 @@ Evidence: `evidence/step1-vcpkg/` and `evidence/step1-conan/` (logs + `timing.tx
 - Requires: git, python3, g++, build-essential.
 - Logs and timings → `evidence/step2-source-build/`.
 
-## Step 3: Incremental build
+**Clear built outputs (for a clean full rebuild):**  
+`./clean-step2.sh` — removes `install-boost/`, `example-beast/build-step2/`, and `boost-src/bin.v2/`, `boost-src/stage/`. Keeps `boost-src/` so the next run skips clone and only re-runs bootstrap + b2 install.
+
+## Step 3: Incremental build (with/without cache)
 
 - From repo root: `./run-step3-incremental.sh`
 - Modifies one header in Boost.Beast, then runs `b2 headers` with GCC and (if available) Clang.
-- Requires: step 2 done (`boost-src`), g++; clang++ optional.
+- **Part A:** incremental build **without** cache → `timing-without-cache.txt`.
+- **Part B:** incremental build **with** ccache (cold then warm) → `timing-with-cache.txt`, `cache-stats.txt`.
+- Requires: step 2 done (`boost-src`), g++; clang++ optional; ccache for Part B (e.g. `apt install ccache`).
 - Logs → `evidence/step3-incremental/`.
 
 ## Step 4: Build caching

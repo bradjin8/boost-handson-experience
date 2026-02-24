@@ -14,6 +14,17 @@ exec > >(tee -a "$LOG") 2>&1
 
 echo "=== Step 2: Full Boost build from source (start: $(date -Iseconds)) ==="
 
+# 0. Record resource allocation (CPUs, RAM, disk) for the report
+{
+  echo "Resource allocation (captured at step start)"
+  echo "CPUs (nproc): $(nproc)"
+  echo "Memory (free -h):"
+  free -h
+  echo "Disk (df -h for repo root):"
+  df -h "$REPO_ROOT"
+} > "${EVIDENCE}/resource.txt" 2>&1
+echo "--- resource allocation written to ${EVIDENCE}/resource.txt ---"
+
 # 1. Clone Boost (modular: boostdep + beast deps)
 if [[ ! -d "$BOOST_SRC" ]] || [[ ! -f "$BOOST_SRC/bootstrap.sh" ]]; then
   echo "--- git clone Boost (timed) ---"
@@ -48,14 +59,14 @@ echo "--- bootstrap (timed) ---"
 start=$(date +%s.%N)
 ./bootstrap.sh --prefix="$INSTALL_PREFIX"
 end=$(date +%s.%N)
-echo "bootstrap_seconds: $(echo "$end - $start" | bc)" >> "${EVIDENCE}/timing.txt"
+echo "bootstrap_seconds: $(echo "$end - $start" | bc)" | tee -a "${EVIDENCE}/timing.txt"
 
-# 3. Install headers (Beast is header-only; --with-headers installs headers only)
-echo "--- b2 --with-headers install (timed) ---"
+# 3. Full Boost build and install (all buildable libraries + headers; can take 30+ min)
+echo "--- b2 install (full build, timed) ---"
 start=$(date +%s.%N)
-./b2 --with-headers install --prefix="$INSTALL_PREFIX" -j$(nproc)
+./b2 install --prefix="$INSTALL_PREFIX" -j$(nproc)
 end=$(date +%s.%N)
-echo "b2_install_seconds: $(echo "$end - $start" | bc)" >> "${EVIDENCE}/timing.txt"
+echo "b2_install_seconds: $(echo "$end - $start" | bc)" | tee -a "${EVIDENCE}/timing.txt"
 
 cd "$REPO_ROOT"
 
@@ -72,7 +83,7 @@ cmake -B "$BUILD_DIR" \
   "$REPO_ROOT/example-beast"
 cmake --build "$BUILD_DIR"
 end=$(date +%s.%N)
-echo "example_build_seconds: $(echo "$end - $start" | bc)" >> "${EVIDENCE}/timing.txt"
+echo "example_build_seconds: $(echo "$end - $start" | bc)" | tee -a "${EVIDENCE}/timing.txt"
 
 echo "--- run example_beast ---"
 "$BUILD_DIR/example_beast"

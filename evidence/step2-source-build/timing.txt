@@ -1,4 +1,4 @@
 clone_seconds: 0
-bootstrap_seconds: 27.508099235
-b2_install_seconds: 25.740134172
-example_build_seconds: 2.481029267
+bootstrap_seconds: 25.387120749
+b2_install_seconds: 39.472248246
+example_build_seconds: 1.686658116
