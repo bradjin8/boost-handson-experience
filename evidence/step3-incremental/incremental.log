@@ -1,0 +1,36 @@
+=== Step 3: Incremental build (start: 2026-02-24T23:18:02+08:00) ===
+--- modify one file in Boost.Beast ---
+--- b2 headers toolset=gcc (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit (cached) [1]
+    - default architecture     : x86 (cached) [1]
+    - symlinks supported       : yes (cached)
+
+[1] gcc-11
+...found 1268 targets...
+b2_headers_gcc_seconds: 4.347663060
+clang++ not found; skipping b2 toolset=clang
+=== Step 3 end: 2026-02-24T23:18:06+08:00 ===
+=== Step 3: Incremental build (start: 2026-02-24T23:31:34+08:00) ===
+--- modify one file in Boost.Beast ---
+--- b2 headers toolset=gcc (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit (cached) [1]
+    - default architecture     : x86 (cached) [1]
+    - symlinks supported       : yes (cached)
+
+[1] gcc-11
+...found 1268 targets...
+b2_headers_gcc_seconds: 2.298347185
+--- b2 headers toolset=clang (timed) ---
+Performing configuration checks
+
+    - default address-model    : 64-bit [1]
+    - default architecture     : x86 [1]
+    - symlinks supported       : yes (cached)
+
+[1] clang-14
+...found 1268 targets...
+=== Step 3 end: 2026-02-24T23:31:39+08:00 ===

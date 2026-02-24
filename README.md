@@ -38,8 +38,9 @@ Evidence: `evidence/step1-vcpkg/` and `evidence/step1-conan/` (logs + `timing.tx
 
 ## Step 3: Incremental build
 
-- Change one `.h`/`.cpp` in Boost.Beast.
-- Rebuild with GCC and with LLVM/Clang (b2).
+- From repo root: `./run-step3-incremental.sh`
+- Modifies one header in Boost.Beast, then runs `b2 headers` with GCC and (if available) Clang.
+- Requires: step 2 done (`boost-src`), g++; clang++ optional.
 - Logs → `evidence/step3-incremental/`.
 
 ## Step 4: Build caching
