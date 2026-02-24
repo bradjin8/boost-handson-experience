@@ -1,2 +1,2 @@
-b2_headers_gcc_seconds: 2.349226023
-b2_headers_clang_seconds: 2.266353565
+b2_headers_gcc_seconds: 18.221653872
+b2_headers_clang_seconds: 177.547734694

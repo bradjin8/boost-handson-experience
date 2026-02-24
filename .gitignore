@@ -29,8 +29,9 @@ install-boost/
 .ccache/
 sccache/
 
-# Step 3: generated ccache wrapper scripts
+# Step 3 / Step 4: generated ccache/sccache wrapper scripts
 evidence/step3-incremental/ccache-bin/
+evidence/step4-cache/ccache-bin/
 
 # Compiled objects / binaries (safety net outside build dirs)
 *.o

@@ -39,20 +39,20 @@ Evidence: `evidence/step1-vcpkg/` and `evidence/step1-conan/` (logs + `timing.tx
 **Clear built outputs (for a clean full rebuild):**  
 `./clean-step2.sh` — removes `install-boost/`, `example-beast/build-step2/`, and `boost-src/bin.v2/`, `boost-src/stage/`. Keeps `boost-src/` so the next run skips clone and only re-runs bootstrap + b2 install.
 
-## Step 3: Incremental build (with/without cache)
+## Step 3: Incremental build of Boost (with/without cache)
 
 - From repo root: `./run-step3-incremental.sh`
-- Modifies one header in Boost.Beast, then runs `b2 headers` with GCC and (if available) Clang.
+- **Requirement:** Test incremental build for the **Boost library** (not the example project) by adding a space to a .h/.cpp under `boost/beast`. Script adds a comment/marker to `libs/beast/include/boost/beast/core/string_param.hpp`, then runs `b2 headers` with GCC and (if available) Clang.
 - **Part A:** incremental build **without** cache → `timing-without-cache.txt`.
 - **Part B:** incremental build **with** ccache (cold then warm) → `timing-with-cache.txt`, `cache-stats.txt`.
 - Requires: step 2 done (`boost-src`), g++; clang++ optional; ccache for Part B (e.g. `apt install ccache`).
 - Logs → `evidence/step3-incremental/`.
 
-## Step 4: Build caching
+## Step 4: Build caching for Boost
 
 - From repo root: `./run-step4-cache.sh`
-- Builds example_beast with ccache (or sccache): cold build, then touch source + warm build; writes cache stats.
-- Requires: step 2 done (install-boost), cmake, g++; ccache or sccache (e.g. `apt install ccache`).
+- **Requirement:** Test caching for the **Boost library** (not the example project) by adding a space to a .h/.cpp under `boost/beast`. Script adds a marker to the same Beast header, then runs `b2 headers` with ccache/sccache: cold build, then add space again + warm build; writes cache stats.
+- Requires: step 2 done (`boost-src`, b2), g++; ccache or sccache (e.g. `apt install ccache`).
 - Logs → `evidence/step4-cache/`.
 
 ## Report

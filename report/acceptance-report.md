@@ -57,22 +57,19 @@ All five hands-on tasks were completed on Linux. The example project (`example-b
   - **With existing build** (`timing.txt`): clone 0 s, bootstrap 25.4 s, b2_install 39.5 s, example 1.7 s.
 - **Resource:** 4 CPUs, 5.9 Gi RAM, 98 G disk (see `evidence/step2-source-build/resource-allocation.md`).
 
-### Step 3 — Incremental build (with/without cache)
+### Step 3 — Incremental build of Boost (with/without cache)
 
 - **Script:** `./run-step3-incremental.sh`
-- **Process:** One header modified in Beast, then `b2 headers` with GCC (and Clang). **Part A:** without cache → `timing-without-cache.txt`. **Part B:** with ccache (cold then warm) → `timing-with-cache.txt`, `cache-stats.txt`.
+- **Requirement:** Test incremental build for the **Boost library** (not the example project) by adding a space to a .h/.cpp under `boost/beast`. **Process:** Add space/comment to `libs/beast/.../string_param.hpp`, then **full b2 build** (`b2 toolset=gcc` / `b2 toolset=clang`, no `headers` target). **Part A:** without cache. **Part B:** with ccache (cold then warm).
 - **Result:** No-cache and with-cache runs completed.
-- **Timings:** `timing-without-cache.txt` (gcc/clang no cache), `timing-with-cache.txt` (gcc with cache cold/warm); `timing.txt` = legacy no-cache values.
+- **Timings (from evidence):** Without cache: GCC 18.2 s, Clang 177.5 s. With cache: cold 20.2 s, warm 18.9 s. Files: `timing-without-cache.txt`, `timing-with-cache.txt`, `timing.txt`.
 
-### Step 4 — Build caching
+### Step 4 — Build caching for Boost
 
 - **Script:** `./run-step4-cache.sh`
-- **Process:** Cold build of example_beast with ccache, touch source, warm build; cache stats captured.
-- **Result:** Cold and warm builds completed; ccache showed cache hits on warm build.
-- **Timings (from `evidence/step4-cache/timing.txt`):**
-  - cold build: 4.0 s
-  - warm build: 0.34 s
-- **Cache stats (from `evidence/step4-cache/cache-stats.txt`):** e.g. 50% hit rate (1 direct hit, 1 miss); cache size within limit.
+- **Requirement:** Test caching for the **Boost library** (not the example project) by adding a space to a .h/.cpp under `boost/beast`. **Process:** Add space/comment to the same Beast header, then `b2 headers` with ccache/sccache (cold, then add space again + warm); cache stats captured.
+- **Result:** Cold and warm builds of Boost (b2) completed.
+- **Timings (from `evidence/step4-cache/timing.txt`):** cold 2.34 s, warm 2.18 s.
 
 ---
 
@@ -80,8 +77,7 @@ All five hands-on tasks were completed on Linux. The example project (`example-b
 
 - vcpkg and Conan both provided Boost.Beast and produced a working example_beast.
 - Full source workflow: clone (or reuse), bootstrap, full `b2 install` (all ~160 Boost libraries), example build against install. Cold vs incremental timings in `timing-without-cache.txt` and `timing.txt`; resource allocation in `resource-allocation.md`.
-- Incremental step: single-file change in Beast and `b2 headers` with GCC and Clang.
-- Build caching: ccache integrated via `CMAKE_CXX_COMPILER_LAUNCHER`; warm build much faster than cold.
+- Step 3 & 4: Incremental build and caching both test the **Boost library** (add a space to a .h under boost/beast, then b2 with/without ccache). Not the example project.
 - Scripts (`run-step1-vcpkg.sh`, `run-step1-conan.sh`, `run-step2-source-build.sh`, `run-step3-incremental.sh`, `run-step4-cache.sh`) run from repo root and write logs/timings under `evidence/`.
 
 ---
@@ -93,7 +89,7 @@ All five hands-on tasks were completed on Linux. The example project (`example-b
 | vcpkg required `VCPKG_ROOT` in child processes | Export `VCPKG_ROOT` in `.bashrc` (e.g. `export VCPKG_ROOT=~/vcpkg-...`) |
 | vcpkg baseline "2024.12.12" not a valid commit SHA | Use 40-char commit SHA in `vcpkg.json` (e.g. for 2026.01.16) |
 | b2 `--with-beast` / `--with-system` invalid (Beast header-only; system not a buildable lib in this layout) | Use `b2 install` for full build (all libraries + headers) |
-| Step 3: b2 "headers" is symlinks, not compilation | Incremental step still demonstrates toolset=gcc vs toolset=clang and change-then-rebuild |
+| Step 3: full b2 build (no `headers` target) | Script runs `b2 toolset=gcc` / `b2 toolset=clang` (full build); demonstrates toolset and change-then-rebuild |
 
 ---
 

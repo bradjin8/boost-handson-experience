@@ -5,7 +5,7 @@ Summary:
   Misses:             0
     Direct:           0
     Preprocessed:     0
-  Uncacheable:        6
+  Uncacheable:       18
 Primary storage:
   Hits:               0 /    0
   Misses:             0

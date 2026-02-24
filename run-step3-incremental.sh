@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# Step 3: Incremental build — change one file in Boost.Beast, rebuild with GCC and Clang (b2).
-# Runs WITHOUT cache and WITH cache (ccache), recording timings for both.
+# Step 3: Incremental build of the Boost library — add a space to a .h/.cpp under boost/beast, then rebuild with b2 (GCC and Clang). With/without cache.
+# Requirement: test incremental build for Boost (not the example project) by modifying a file under boost/beast.
 # Run from repo root. Requires step 2 done (boost-src, b2). Logs → evidence/step3-incremental/.
 # Requires: g++, clang++ (optional), ccache (for "with cache" run)
 
@@ -25,37 +25,34 @@ if [[ ! -f "$BEAST_FILE" ]]; then
   exit 1
 fi
 
-# Ensure marker is present for incremental change
-ensure_marker() {
-  local marker="// Step 3 incremental build marker"
+# Add a space (or comment) to a .h under boost/beast so b2 sees a change (per requirement: "adding a space into a .h/.cpp file under boost/beast")
+add_space_to_beast_file() {
+  # Append a space and comment so the file content changes; b2 will see the change for incremental build
   if ! grep -q "Step 3 incremental build marker" "$BEAST_FILE" 2>/dev/null; then
-    echo "$marker" >> "$BEAST_FILE"
+    echo "" >> "$BEAST_FILE"
+    echo "// Step 3 incremental build marker" >> "$BEAST_FILE"
   fi
-}
-
-# Touch file so b2 sees a change for next incremental run
-touch_file() {
+  # Ensure mtime changes for next run
   touch "$BEAST_FILE"
 }
 
 cd "$BOOST_SRC"
 
 # ---- Part A: WITHOUT cache ----
-echo "--- Part A: Incremental build WITHOUT cache ---"
-ensure_marker
-touch_file
+echo "--- Part A: Incremental build of Boost (beast) WITHOUT cache ---"
+add_space_to_beast_file
 
-echo "--- b2 headers toolset=gcc, no cache (timed) ---"
+echo "--- b2 (full build) toolset=gcc, no cache (timed) ---"
 start=$(date +%s.%N)
-./b2 headers toolset=gcc -j$(nproc)
+./b2 toolset=gcc -j$(nproc)
 end=$(date +%s.%N)
 gcc_no_cache=$(echo "$end - $start" | bc)
 echo "b2_headers_gcc_no_cache_seconds: $gcc_no_cache" | tee "${EVIDENCE}/timing-without-cache.txt"
 
 if command -v clang++ &>/dev/null; then
-  echo "--- b2 headers toolset=clang, no cache (timed) ---"
+  echo "--- b2 (full build) toolset=clang, no cache (timed) ---"
   start=$(date +%s.%N)
-  ./b2 headers toolset=clang -j$(nproc)
+  ./b2 toolset=clang -j$(nproc)
   end=$(date +%s.%N)
   clang_no_cache=$(echo "$end - $start" | bc)
   echo "b2_headers_clang_no_cache_seconds: $clang_no_cache" >> "${EVIDENCE}/timing-without-cache.txt"
@@ -83,18 +80,18 @@ exec ccache '"$REAL_GCC"' "$@"' > "$CCACHE_BIN/gcc"
   chmod +x "$CCACHE_BIN/g++" "$CCACHE_BIN/gcc"
   export PATH="${CCACHE_BIN}:${PATH}"
 
-  touch_file
-  echo "--- b2 headers toolset=gcc, with ccache — cold (timed) ---"
+  add_space_to_beast_file
+  echo "--- b2 (full build) toolset=gcc, with ccache — cold (timed) ---"
   start=$(date +%s.%N)
-  ./b2 headers toolset=gcc -j$(nproc)
+  ./b2 toolset=gcc -j$(nproc)
   end=$(date +%s.%N)
   gcc_cold=$(echo "$end - $start" | bc)
   echo "b2_headers_gcc_with_cache_cold_seconds: $gcc_cold" | tee "${EVIDENCE}/timing-with-cache.txt"
 
-  touch_file
-  echo "--- b2 headers toolset=gcc, with ccache — warm (timed) ---"
+  add_space_to_beast_file
+  echo "--- b2 (full build) toolset=gcc, with ccache — warm (timed) ---"
   start=$(date +%s.%N)
-  ./b2 headers toolset=gcc -j$(nproc)
+  ./b2 toolset=gcc -j$(nproc)
   end=$(date +%s.%N)
   gcc_warm=$(echo "$end - $start" | bc)
   echo "b2_headers_gcc_with_cache_warm_seconds: $gcc_warm" >> "${EVIDENCE}/timing-with-cache.txt"
