@@ -45,7 +45,9 @@ Evidence: `evidence/step1-vcpkg/` and `evidence/step1-conan/` (logs + `timing.tx
 
 ## Step 4: Build caching
 
-- Use ccache or sccache for incremental build.
+- From repo root: `./run-step4-cache.sh`
+- Builds example_beast with ccache (or sccache): cold build, then touch source + warm build; writes cache stats.
+- Requires: step 2 done (install-boost), cmake, g++; ccache or sccache (e.g. `apt install ccache`).
 - Logs → `evidence/step4-cache/`.
 
 ## Report

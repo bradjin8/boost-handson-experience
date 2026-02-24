@@ -1,0 +1,42 @@
+=== Step 4: Build caching (start: 2026-02-24T23:34:50+08:00) ===
+Using compiler launcher: ccache
+--- cold build with ccache (timed) ---
+-- The CXX compiler identification is GNU 11.4.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+CMake Warning (dev) at CMakeLists.txt:14 (find_package):
+  Policy CMP0167 is not set: The FindBoost module is removed.  Run "cmake
+  --help-policy CMP0167" for policy details.  Use the cmake_policy command to
+  set the policy and suppress this warning.
+
+This warning is for project developers.  Use -Wno-dev to suppress it.
+
+-- Configuring done (0.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/brad/Desktop/Workspace/Boost-hands-on-exp/example-beast/build-step4
+[ 50%] Building CXX object CMakeFiles/example_beast.dir/main.cpp.o
+[100%] Linking CXX executable example_beast
+[100%] Built target example_beast
+cold_build_seconds: 3.975478625
+--- touch source, warm build (timed) ---
+[ 50%] Building CXX object CMakeFiles/example_beast.dir/main.cpp.o
+[100%] Linking CXX executable example_beast
+[100%] Built target example_beast
+--- cache stats ---
+Summary:
+  Hits:               1 /    2 (50.00 %)
+    Direct:           1 /    2 (50.00 %)
+    Preprocessed:     0 /    1 (0.00 %)
+  Misses:             1
+    Direct:           1
+    Preprocessed:     1
+Primary storage:
+  Hits:               2 /    4 (50.00 %)
+  Misses:             2
+  Cache size (GB): 0.00 / 5.00 (0.00 %)
+
+Use the -v/--verbose option for more details.
+=== Step 4 end: 2026-02-24T23:34:54+08:00 ===

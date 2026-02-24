@@ -2,6 +2,7 @@
 example-beast/build-conan/
 example-beast/build-vcpkg/
 example-beast/build-step2/
+example-beast/build-step4/
 build/
 
 # vcpkg (if cloned into repo)
